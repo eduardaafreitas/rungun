@@ -12,7 +12,7 @@ void animate_background(ALLEGRO_BITMAP* background, int* background_x, int speed
 
 void initial_animation(ALLEGRO_FONT *font_text, ALLEGRO_FONT *font_title){
     al_draw_text(font_title, al_map_rgb(255, 255, 255), SIZE_X / 2, SIZE_Y / 2 - 30,
-                 ALLEGRO_ALIGN_CENTER, "Space Wars");
+                 ALLEGRO_ALIGN_CENTER, "Zombies Run'n Gun");
     al_draw_text(font_text, al_map_rgb(255, 255, 255), SIZE_X / 2, SIZE_Y / 2 + 10,
                  ALLEGRO_ALIGN_CENTER, "Pressione ENTER para continuar");
     al_draw_text(font_text, al_map_rgb(255, 255, 255), SIZE_X / 2, SIZE_Y / 2 + 40,

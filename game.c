@@ -72,9 +72,7 @@ void inicializando(){
     inicia_allegro(font_title, "fontTitle");
     font_text = al_load_font(FONT_TEXT_PATH, 25, 0);
     inicia_allegro(font_text, "fontTitle");
-    font_text2 = al_load_font(FONT_TEXT2_PATH, 25, 0);
-    inicia_allegro(font_text2, "fontTitle2");
-
+    
     //BACKGROUNDS:
     background = al_load_bitmap(PATH_BG1);
     inicia_allegro(background, "background");
@@ -298,7 +296,6 @@ void state_end_game() {
     al_destroy_bitmap(sheet_enemy4);
     al_destroy_font(font_title);
     al_destroy_font(font_text);
-    al_destroy_font(font_text2);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     al_destroy_display(display);

@@ -4,11 +4,10 @@
 #include "headers.h"
 #include "player.h"
 
-#define SIZE_X 960
-#define SIZE_Y 720
-#define FONT_TITLE_PATH "resources/fonts/Starjedi.ttf"
-#define FONT_TEXT_PATH "resources/fonts/Segoe.ttf"
-#define FONT_TEXT2_PATH "resources/fonts/SegoeBold.ttf"
+#define SIZE_X 1920
+#define SIZE_Y 1080
+#define FONT_TITLE_PATH "resources/fonts/DigitalDisco.ttf"
+#define FONT_TEXT_PATH "resources/fonts/DigitalDisco-Thin.ttf"
 
 void initial_text(ALLEGRO_FONT *font_text);
 void animate_background(ALLEGRO_BITMAP* background, int* background_x, int speed);
