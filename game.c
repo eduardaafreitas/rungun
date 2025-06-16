@@ -27,7 +27,7 @@ int wave_level = 1;          // Começa no nível 1
 float elapsed_time = 0.0;    // Tempo decorrido na fase
 
 unsigned char key[ALLEGRO_KEY_MAX];
-player *soldier;
+player *character;
 enemy *enemy1;
 enemy *enemy2;
 enemy *enemy3;
@@ -107,7 +107,7 @@ void inicializando(){
     sheet_boss2 = al_load_bitmap(BOSS2_PATH);
     inicia_allegro(sheet_boss2, "spritesheetboss1");
     
-    soldier = init_player(sheet_player);
+    character = init_player(sheet_player);
     enemy1 = init_enemy(sheet_enemy1, 1);
     enemy2 = init_enemy(sheet_enemy2, 2);
     enemy3 = init_enemy(sheet_enemy3, 3);
@@ -177,25 +177,25 @@ void state_playing() {
             case ALLEGRO_EVENT_TIMER:
                 al_clear_to_color(al_map_rgb(0, 0, 0));
                 animate_background(background3, &background_x, BACKGROUND_SPEED);
-                entry_identifyer(key, soldier);
+                entry_identifyer(key, character);
                 // Atualiza inimigos com base na onda
                 if (wave_level < 3) {
-                    manage_enemy_wave(enemy1, soldier, font_text);
+                    manage_enemy_wave(enemy1, character, font_text);
                 } else if (wave_level < 5) {
-                    manage_enemy_wave(enemy2, soldier, font_text);
+                    manage_enemy_wave(enemy2, character, font_text);
                 } else if (wave_level < 7) {
-                    manage_enemy_wave(enemy3, soldier, font_text);
+                    manage_enemy_wave(enemy3, character, font_text);
                 } else if (wave_level < 9) {
-                    manage_enemy_wave(enemy4, soldier, font_text);
+                    manage_enemy_wave(enemy4, character, font_text);
                 } else if (wave_level < 10){
-                    manage_enemy_wave(boss1, soldier, font_text);
+                    manage_enemy_wave(boss1, character, font_text);
                 } else if(wave_level < 15) {
                     wave_level = 0;
                     state = fase2;
                 }
                 al_flip_display();
                 // Atualiza a onda
-                update_wave_level(soldier);
+                update_wave_level(character);
                 break;
 
             case ALLEGRO_EVENT_KEY_DOWN:
@@ -225,25 +225,25 @@ void state_fase2() {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
                 animate_background(background2, &background_x, BACKGROUND_SPEED);
 
-                entry_identifyer(key, soldier);
+                entry_identifyer(key, character);
 
                 // Aqui, você pode usar inimigos ou lógica diferentes para a Fase 2
                 if (wave_level < 3) {
-                    manage_enemy_wave(enemy6, soldier, font_text);
+                    manage_enemy_wave(enemy6, character, font_text);
                 } else if (wave_level < 5) {
-                    manage_enemy_wave(enemy7, soldier, font_text);
+                    manage_enemy_wave(enemy7, character, font_text);
                 } else if (wave_level < 7) {
-                    manage_enemy_wave(enemy8, soldier, font_text);
+                    manage_enemy_wave(enemy8, character, font_text);
                 } else if (wave_level < 9) {
-                    manage_enemy_wave(enemy9, soldier, font_text);
+                    manage_enemy_wave(enemy9, character, font_text);
                 } else if (wave_level < 10){
-                    manage_enemy_wave(boss2, soldier, font_text);
+                    manage_enemy_wave(boss2, character, font_text);
                 } else {
                     state = game_over;
                 }
 
                 al_flip_display();
-                update_wave_level(soldier);
+                update_wave_level(character);
                 break;
 
             case ALLEGRO_EVENT_KEY_DOWN:
@@ -325,7 +325,7 @@ void state_game_over() {
                          ALLEGRO_ALIGN_CENTER, "GAME OVER");
             
             char score_text[50];
-            snprintf(score_text, sizeof(score_text), "Your Score: %d", soldier->score);
+            snprintf(score_text, sizeof(score_text), "Your Score: %d", character->score);
             al_draw_text(font_text, al_map_rgb(255, 255, 255),
                          al_get_display_width(display) / 2,
                          al_get_display_height(display) / 2,
@@ -343,29 +343,29 @@ void state_game_over() {
     exit(0);
 }
 
-void entry_identifyer(unsigned char *key, player *soldier){
+void entry_identifyer(unsigned char *key, player *character){
     if (key[ALLEGRO_KEY_UP]) {
-        soldier->atual_pose = up;  // Muda para sprite "cima"
+        character->atual_pose = up;  // Muda para sprite "cima"
     } else if (key[ALLEGRO_KEY_DOWN]) {
-        soldier->atual_pose = down; // Muda para sprite "baixo"
+        character->atual_pose = down; // Muda para sprite "baixo"
     } else if (key[ALLEGRO_KEY_LEFT]) {
-        soldier->atual_pose = back; // Muda para "trás"
+        character->atual_pose = back; // Muda para "trás"
     } else if (key[ALLEGRO_KEY_RIGHT]) {
-        soldier->atual_pose = front; // Muda para "frente"
+        character->atual_pose = front; // Muda para "frente"
     } else if (key[ALLEGRO_KEY_ESCAPE]){
         state_pause();
     }
 
 }
 
-void update_wave_level(player *soldier) {
-    if (soldier->enemies_defeated >= 2) {
+void update_wave_level(player *character) {
+    if (character->enemies_defeated >= 2) {
         wave_level++;
-        soldier->enemies_defeated = 0;  // Reinicia contagem
+        character->enemies_defeated = 0;  // Reinicia contagem
     }
 }
 
-void manage_enemy_wave(enemy* enemy_wave, player *soldier, ALLEGRO_FONT* font) {
+void manage_enemy_wave(enemy* enemy_wave, player *character, ALLEGRO_FONT* font) {
     update_enemy(enemy_wave);
     draw_enemy(enemy_wave);
     
@@ -374,18 +374,18 @@ void manage_enemy_wave(enemy* enemy_wave, player *soldier, ALLEGRO_FONT* font) {
     // Verificar se o jogador foi atingido por alguma bala dos inimigos
     for (int i = 0; i < MAX_BULLETS; i++) {
 
-        if (enemy_wave->bullet[i].active && check_collision(soldier, &enemy_wave->bullet[i])) {
-            soldier->health_points --;
+        if (enemy_wave->bullet[i].active && check_collision(character, &enemy_wave->bullet[i])) {
+            character->health_points --;
             enemy_wave->bullet[i].active = false;  // Desativa a bala após o impacto
 
-            if (soldier->health_points == 0) {
+            if (character->health_points == 0) {
                 state = game_over;
                 state_game_over();
             }
         }
     }
 
-    update_player(event, soldier, enemy_wave);
-    draw_player(soldier);
-    draw_hud(soldier, font);
+    update_player(event, character, enemy_wave);
+    draw_player(character);
+    draw_hud(character, font);
 }

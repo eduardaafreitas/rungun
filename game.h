@@ -5,9 +5,10 @@
 #include "player.h"
 #include "screen.h"
 
-#define PATH_BG1 "resources/bg/bg1.png"
-#define PATH_BG2 "resources/bg/bg2.png"
-#define PATH_BG3 "resources/bg/bg3.png"
+#define PATH_BG1 "resources/bg/war.png"
+#define PATH_BG2 "resources/bg/war2.png"
+#define PATH_BG3 "resources/bg/war3.png"
+#define PATH_BG4 "resources/bg/war4.png"
 
 extern int wave_level;
 extern float elapsed_time;
@@ -27,10 +28,10 @@ void state_end_game();
 void state_game_over();
 void state_pause();
 
-void entry_identifyer(unsigned char *key, player *soldier);
+void entry_identifyer(unsigned char *key, player *character);
 
 //gerenciando ondas de inimigos:
-void update_wave_level(player *soldier);
-void manage_enemy_wave(enemy* enemy_wave, player *soldier, ALLEGRO_FONT* font);
+void update_wave_level(player *character);
+void manage_enemy_wave(enemy* enemy_wave, player *character, ALLEGRO_FONT* font);
 
 #endif
