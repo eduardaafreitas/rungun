@@ -38,14 +38,12 @@ player *init_player(ALLEGRO_BITMAP* sheet){
 }
 
 void update_player(ALLEGRO_EVENT event, player *character, enemy *enemy_active, double delta_time) {
-    // Atualiza o tempo desde o último disparo
-    character->time_since_last_shot += delta_time;
-
     // Atualiza o tempo da animação
     character->frame_time += delta_time;
     if (character->frame_time >= character->frame_duration) {
         character->frame_time -= character->frame_duration;
         character->current_frame++;
+        
         int max_frames = 1; // padrão, será alterado abaixo
 
         // Define max_frames de acordo com a pose atual
@@ -59,65 +57,54 @@ void update_player(ALLEGRO_EVENT event, player *character, enemy *enemy_active, 
             default: max_frames = 4; break;
         }
 
+        // Loop nos quadros de animação
         if (character->current_frame >= max_frames)
             character->current_frame = 0;
     }
-    // Atualiza o tempo desde o último disparo
-    character->time_since_last_shot += 1.0 / 60.0; // Assumindo 60 FPS
-
-    // Flags para determinar o estado do jogador
-    int moving_horizontal = 0;
-
-    // Aplica gravidade se não estiver no chão
-    if (!character->is_on_ground) {
-        character->velocity_y += character->gravity; // Aceleração devido à gravidade
-        character->pos_y += character->velocity_y;  // Atualiza a posição vertical
-    }
-
-    // Verifica se o jogador atingiu o chão
-    if (character->pos_y >= GROUND_LEVEL) {
-        character->pos_y = GROUND_LEVEL;            // Ajusta a posição ao nível do chão
-        character->velocity_y = 0;                 // Reseta a velocidade vertical
-        character->is_on_ground = 1;               // Marca como no chão
-    }
 
     // Movimenta o jogador horizontalmente
+    int moving_horizontal = 0;
     if (key[ALLEGRO_KEY_LEFT]) {
         character->pos_x -= character->speed;
-        character->atual_pose = walk; // Ajusta pose para andar
+        character->atual_pose = walk;
         moving_horizontal = 1;
     }
     if (key[ALLEGRO_KEY_RIGHT]) {
         character->pos_x += character->speed;
-        character->atual_pose = walk; // Ajusta pose para andar
+        character->atual_pose = walk;
         moving_horizontal = 1;
+    }
+
+    // Aplica gravidade
+    if (!character->is_on_ground) {
+        character->velocity_y += character->gravity;
+        character->pos_y += character->velocity_y;
+    }
+
+    // Verifica o chão
+    if (character->pos_y >= GROUND_LEVEL) {
+        character->pos_y = GROUND_LEVEL;
+        character->velocity_y = 0;
+        character->is_on_ground = 1;
     }
 
     // Lógica do pulo
     if (key[ALLEGRO_KEY_UP] && character->is_on_ground) {
-        character->velocity_y = character->jump_strength; // Aplica força do pulo
-        character->is_on_ground = 0;                     // Marca como fora do chão
-        character->atual_pose = jump;                    // Ajusta a pose para pulo
+        character->velocity_y = character->jump_strength;
+        character->is_on_ground = 0;
+        character->atual_pose = jump;
     }
-
-    // Limitar o jogador dentro da tela
-    if (character->pos_y < 0) character->pos_y = 0;
-    if (character->pos_y > SIZE_Y - al_get_bitmap_height(character->sprites_player_idle[0]))
-        character->pos_y = SIZE_Y - al_get_bitmap_height(character->sprites_player_idle[0]);
-    if (character->pos_x < 0) character->pos_x = 0;
-    if (character->pos_x > SIZE_X - al_get_bitmap_width(character->sprites_player_idle[0]))
-        character->pos_x = SIZE_X - al_get_bitmap_width(character->sprites_player_idle[0]);
 
     // Caso o jogador esteja parado, volte à pose padrão
     if (!moving_horizontal && character->is_on_ground) {
         character->atual_pose = idle;
     }
 
-    // Dispara tiros contínuos
+    // Dispara tiros
     if (key[ALLEGRO_KEY_SPACE] && character->time_since_last_shot >= character->shot_cooldown) {
         shoot_player(character);
-        character->atual_pose = shoot; // Ajusta pose para atirar
-        character->time_since_last_shot = 0;      // Reseta o cooldown após disparar
+        character->atual_pose = shoot;
+        character->time_since_last_shot = 0.0;
     }
 
     // Atualiza os tiros
@@ -129,39 +116,42 @@ void update_player(ALLEGRO_EVENT event, player *character, enemy *enemy_active, 
 void draw_player(player *character) {
     ALLEGRO_BITMAP *current_frame = NULL;
 
-    // Seleciona o quadro atual da animação com base na pose
+    // Determina o quadro atual da animação com base na pose
     switch (character->atual_pose) {
         case idle:
-            current_frame = character->sprites_player_idle[0]; 
+            current_frame = character->sprites_player_idle[character->current_frame];
             break;
         case walk:
-            current_frame = character->sprites_player_walk[0]; 
+            current_frame = character->sprites_player_walk[character->current_frame];
             break;
         case run:
-            current_frame = character->sprites_player_run[0]; 
+            current_frame = character->sprites_player_run[character->current_frame];
             break;
         case jump:
-            current_frame = character->sprites_player_jump[0]; 
+            current_frame = character->sprites_player_jump[character->current_frame];
             break;
         case down:
-            current_frame = character->sprites_player_down[0]; 
+            current_frame = character->sprites_player_down[character->current_frame];
             break;
         case shoot:
-            current_frame = character->sprites_player_shoot[0]; 
+            current_frame = character->sprites_player_shoot[character->current_frame];
             break;
         default:
-            current_frame = character->sprites_player_idle[0]; // Caso padrão
+            current_frame = character->sprites_player_idle[0]; // Fallback para o primeiro frame da pose idle
             break;
     }
 
-    // Desenha o quadro atual
+    // Desenha o quadro atual na posição do jogador
     if (current_frame) {
         al_draw_bitmap(current_frame, character->pos_x, character->pos_y, 0);
+    } else {
+        printf("Erro: quadro de animação não encontrado para a pose atual.\n");
     }
 
     // Desenha os tiros do jogador
     draw_bullets_player(character);
 }
+
 
 void free_player(player *character) {
     if (character != NULL) {

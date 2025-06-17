@@ -5,7 +5,13 @@
 #include "bullet.h"
 #include "enemy.h"
 
-#define PATH_PLAYER_IDLE "resources/player/2 Punk/Idle1.png"
+#define PATH_PLAYER_IDLE "resources/player/idleshoot.png"
+#define PATH_PLAYER_WALK "resources/player/walkshoot.png"
+#define PATH_PLAYER_RUN "resources/player/runshoot.png"
+#define PATH_PLAYER_JUMP "resources/player/jumpshoot.png"
+#define PATH_PLAYER_DOWN "resources/player/downshoot.png"
+#define PATH_PLAYER_SHOOT "resources/player/shootup.png"
+
 #define GROUND_LEVEL 320
 
 typedef enum {idle, walk, run, jump, down, shoot} playerPose;
