@@ -385,7 +385,7 @@ void manage_enemy_wave(enemy* enemy_wave, player *character, ALLEGRO_FONT* font)
         }
     }
 
-    update_player(event, character, enemy_wave);
+    update_player(event, character, enemy_wave, 1.0/60.0);
     draw_player(character);
     draw_hud(character, font);
 }
