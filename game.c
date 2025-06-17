@@ -83,9 +83,9 @@ void inicializando(){
 
     //SPRITES PLAYER AND ENEMIES:
     inicia_allegro(al_init_image_addon(), "image addon");
-    sheet_player = al_load_bitmap(PATH_PLAYER_IDLE);
-
+    sheet_player = al_load_bitmap(PATH_PLAYER);
     inicia_allegro(sheet_player, "spritesheetPlayer"); 
+    
     sheet_enemy1 = al_load_bitmap(ENEMY1_PATH);
     inicia_allegro(sheet_enemy1, "spritesheetEnemy1");
     sheet_enemy2 = al_load_bitmap(ENEMY2_PATH);
@@ -146,7 +146,7 @@ void state_start() {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
                 al_draw_bitmap(background, 0, 0, 0);
                 al_draw_text(font_text, al_map_rgb(255, 255, 255), 20, 177,
-                            ALLEGRO_ALIGN_LEFT, "Muito tempo atrás, em uma galáxia muito, muito distante...");
+                            ALLEGRO_ALIGN_LEFT, "...");
                 initial_text(font_text);
                 al_flip_display();
             }
@@ -349,9 +349,9 @@ void entry_identifyer(unsigned char *key, player *character){
     } else if (key[ALLEGRO_KEY_DOWN]) {
         character->atual_pose = down; // Muda para sprite "baixo"
     } else if (key[ALLEGRO_KEY_LEFT]) {
-        character->atual_pose = walk; // Muda para "trás"
+        character->atual_pose = walkL; // Muda para "trás"
     } else if (key[ALLEGRO_KEY_RIGHT]) {
-        character->atual_pose = walk; // Muda para "frente"
+        character->atual_pose = walkR; // Muda para "frente"
     } else if (key[ALLEGRO_KEY_ESCAPE]){
         state_pause();
     }
@@ -385,7 +385,7 @@ void manage_enemy_wave(enemy* enemy_wave, player *character, ALLEGRO_FONT* font)
         }
     }
 
-    update_player(event, character, enemy_wave, 1.0/60.0);
+    update_player(event, character, enemy_wave);
     draw_player(character);
     draw_hud(character, font);
 }
