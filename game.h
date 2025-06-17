@@ -5,10 +5,10 @@
 #include "player.h"
 #include "screen.h"
 
-#define PATH_BG1 "resources/bg/war.png"
-#define PATH_BG2 "resources/bg/war2.png"
-#define PATH_BG3 "resources/bg/war3.png"
-#define PATH_BG4 "resources/bg/war4.png"
+#define PATH_BG1 "resources/bg/1.png"
+#define PATH_BG2 "resources/bg/background.png"
+#define PATH_BG3 "resources/bg/background.png"
+//#define PATH_BG4 "resources/bg/war4.png"
 
 extern int wave_level;
 extern float elapsed_time;

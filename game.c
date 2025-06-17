@@ -83,7 +83,7 @@ void inicializando(){
 
     //SPRITES PLAYER AND ENEMIES:
     inicia_allegro(al_init_image_addon(), "image addon");
-    sheet_player = al_load_bitmap(PATH_PLAYER);
+    sheet_player = al_load_bitmap(PATH_PLAYER_IDLE);
 
     inicia_allegro(sheet_player, "spritesheetPlayer"); 
     sheet_enemy1 = al_load_bitmap(ENEMY1_PATH);
@@ -94,30 +94,30 @@ void inicializando(){
     inicia_allegro(sheet_enemy3, "spritesheetEnemy3");
     sheet_enemy4 = al_load_bitmap(ENEMY4_PATH);
     inicia_allegro(sheet_enemy4, "spritesheetEnemy4");
-    sheet_boss1 = al_load_bitmap(BOSS1_PATH);
-    inicia_allegro(sheet_boss1, "spritesheetboss1");
-    sheet_enemy6 = al_load_bitmap(ENEMY6_PATH);
-    inicia_allegro(sheet_enemy6, "spritesheetEnemy4");
-    sheet_enemy7 = al_load_bitmap(ENEMY7_PATH);
-    inicia_allegro(sheet_enemy7, "spritesheetEnemy4");
-    sheet_enemy8 = al_load_bitmap(ENEMY8_PATH);
-    inicia_allegro(sheet_enemy8, "spritesheetEnemy4");
-    sheet_enemy9 = al_load_bitmap(ENEMY9_PATH);
-    inicia_allegro(sheet_enemy9, "spritesheetEnemy4");
-    sheet_boss2 = al_load_bitmap(BOSS2_PATH);
-    inicia_allegro(sheet_boss2, "spritesheetboss1");
+    // sheet_boss1 = al_load_bitmap(BOSS1_PATH);
+    // inicia_allegro(sheet_boss1, "spritesheetboss1");
+    // sheet_enemy6 = al_load_bitmap(ENEMY6_PATH);
+    // inicia_allegro(sheet_enemy6, "spritesheetEnemy4");
+    // sheet_enemy7 = al_load_bitmap(ENEMY7_PATH);
+    // inicia_allegro(sheet_enemy7, "spritesheetEnemy4");
+    // sheet_enemy8 = al_load_bitmap(ENEMY8_PATH);
+    // inicia_allegro(sheet_enemy8, "spritesheetEnemy4");
+    // sheet_enemy9 = al_load_bitmap(ENEMY9_PATH);
+    // inicia_allegro(sheet_enemy9, "spritesheetEnemy4");
+    // sheet_boss2 = al_load_bitmap(BOSS2_PATH);
+    // inicia_allegro(sheet_boss2, "spritesheetboss1");
     
     character = init_player(sheet_player);
     enemy1 = init_enemy(sheet_enemy1, 1);
     enemy2 = init_enemy(sheet_enemy2, 2);
     enemy3 = init_enemy(sheet_enemy3, 3);
     enemy4 = init_enemy(sheet_enemy4, 4);    
-    boss1 = init_enemy(sheet_boss1, 5);
-    enemy6 = init_enemy(sheet_enemy6, 6);
-    enemy7 = init_enemy(sheet_enemy7, 7);
-    enemy8 = init_enemy(sheet_enemy8, 8);
-    enemy9 = init_enemy(sheet_enemy9, 9);
-    boss2 = init_enemy(sheet_boss2, 10);
+    // boss1 = init_enemy(sheet_boss1, 5);
+    // enemy6 = init_enemy(sheet_enemy6, 6);
+    // enemy7 = init_enemy(sheet_enemy7, 7);
+    // enemy8 = init_enemy(sheet_enemy8, 8);
+    // enemy9 = init_enemy(sheet_enemy9, 9);
+    // boss2 = init_enemy(sheet_boss2, 10);
 
 	al_register_event_source(queue, al_get_display_event_source(display));
 	al_register_event_source(queue, al_get_timer_event_source(timer));
@@ -345,13 +345,13 @@ void state_game_over() {
 
 void entry_identifyer(unsigned char *key, player *character){
     if (key[ALLEGRO_KEY_UP]) {
-        character->atual_pose = up;  // Muda para sprite "cima"
+        character->atual_pose = jump;  // Muda para sprite "cima"
     } else if (key[ALLEGRO_KEY_DOWN]) {
         character->atual_pose = down; // Muda para sprite "baixo"
     } else if (key[ALLEGRO_KEY_LEFT]) {
-        character->atual_pose = back; // Muda para "trás"
+        character->atual_pose = walk; // Muda para "trás"
     } else if (key[ALLEGRO_KEY_RIGHT]) {
-        character->atual_pose = front; // Muda para "frente"
+        character->atual_pose = walk; // Muda para "frente"
     } else if (key[ALLEGRO_KEY_ESCAPE]){
         state_pause();
     }

@@ -5,7 +5,7 @@
 #include "bullet.h"
 #include "enemy.h"
 
-#define PATH_PLAYER "resources/"
+#define PATH_PLAYER_IDLE "resources/player/2 Punk/Idle1.png"
 
 typedef enum {idle, walk, run, jump, down, shoot} playerPose;
 

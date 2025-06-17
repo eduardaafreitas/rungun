@@ -4,16 +4,16 @@
 #include "headers.h"
 #include "player.h"
 
-#define ENEMY1_PATH "resources/enemy/enemy1.png"
-#define ENEMY2_PATH "resources/enemy/enemy2.png"
-#define ENEMY3_PATH "resources/enemy/enemy3.png"
-#define ENEMY4_PATH "resources/enemy/enemy4.png"
-#define BOSS1_PATH "resources/enemy/boss1.png"
-#define ENEMY6_PATH "resources/enemy/enemy6.png"
-#define ENEMY7_PATH "resources/enemy/enemy7.png"
-#define ENEMY8_PATH "resources/enemy/enemy8.png"
-#define ENEMY9_PATH "resources/enemy/enemy9.png"
-#define BOSS2_PATH "resources/enemy/boss2.png"
+#define ENEMY1_PATH "resources/enemies/Walk.png"
+#define ENEMY2_PATH "resources/enemies/Walk2.png"
+#define ENEMY3_PATH "resources/enemies/Walk3.png"
+#define ENEMY4_PATH "resources/enemies/Walk4.png"
+//#define BOSS1_PATH "resources/bosses/boss1.png"
+#define ENEMY6_PATH "resources/enemies/Walk5.png"
+#define ENEMY7_PATH "resources/enemies/Walk6.png"
+//#define ENEMY8_PATH "resources/enemies/Walk8.png"
+//#define ENEMY9_PATH "resources/enemies/Walk9.png"
+//#define BOSS2_PATH "resources/bosses/boss2.png"
 
 //Tipos de inimigos:
 // 1: apenas voa

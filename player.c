@@ -6,87 +6,86 @@
 
 player *init_player(ALLEGRO_BITMAP* sheet){
     
-    player *soldier;
-    soldier = malloc(sizeof(player));
-    if (soldier == NULL){
+    player *character;
+    character = malloc(sizeof(player));
+    if (character == NULL){
         printf("Erro ao alocar memoria (player)\n");
         exit(1);
     }
-    soldier->pos_x = 50;
-    soldier->pos_y = SIZE_Y/2;  
-    soldier->speed = 5.0;
-    soldier->score = 0;
-    soldier->health_points = 10;
+    character->pos_x = 50;
+    character->pos_y = 0;  
+    character->speed = 5.0;
+    character->score = 0;
+    character->health_points = 10;
     
-    sprites_player(sheet, soldier);
-    soldier->atual_pose = standard;
-    soldier->bullet = alloc_bullets(MAX_BULLETS);
-    soldier->time_since_last_shot = 0.0;
-    soldier->shot_cooldown = 0.25;
-    soldier->enemies_defeated = 0;
+    sprites_player(sheet, character);
+    character->atual_pose = idle;
+    character->bullet = alloc_bullets(MAX_BULLETS);
+    character->time_since_last_shot = 0.0;
+    character->shot_cooldown = 0.25;
+    character->enemies_defeated = 0;
 
-    return soldier;
+    return character;
 }
 
-void update_player(ALLEGRO_EVENT event, player *soldier, enemy *enemy_active) {
+void update_player(ALLEGRO_EVENT event, player *character, enemy *enemy_active) {
     // Atualiza o tempo desde o último disparo
-    soldier->time_since_last_shot += 1.0 / 60.0; // Assumindo 60 FPS
+    character->time_since_last_shot += 1.0 / 60.0; // Assumindo 60 FPS
 
     // Movimenta a nave enquanto a tecla está pressionada
-    if (key[ALLEGRO_KEY_UP]) soldier->pos_y -= soldier->speed;
-    if (key[ALLEGRO_KEY_DOWN]) soldier->pos_y += soldier->speed;
-    if (key[ALLEGRO_KEY_LEFT]) soldier->pos_x -= soldier->speed;
-    if (key[ALLEGRO_KEY_RIGHT]) soldier->pos_x += soldier->speed;
+    if (key[ALLEGRO_KEY_UP]) character->pos_y -= character->speed;
+    if (key[ALLEGRO_KEY_DOWN]) character->pos_y += character->speed;
+    if (key[ALLEGRO_KEY_LEFT]) character->pos_x -= character->speed;
+    if (key[ALLEGRO_KEY_RIGHT]) character->pos_x += character->speed;
 
     // Limitar o jogador dentro da tela
-    if (soldier->pos_y < 0) soldier->pos_y = 0;
-    if (soldier->pos_y > SIZE_Y - al_get_bitmap_height(soldier->sprites_player[standard])) 
-        soldier->pos_y = SIZE_Y - al_get_bitmap_height(soldier->sprites_player[standard]);
-    if (soldier->pos_x < 0) soldier->pos_x = 0;
-    if (soldier->pos_x > SIZE_X - al_get_bitmap_width(soldier->sprites_player[standard])) 
-        soldier->pos_x = SIZE_X - al_get_bitmap_width(soldier->sprites_player[standard]);
+    if (character->pos_y < 0) character->pos_y = 0;
+    if (character->pos_y > SIZE_Y - al_get_bitmap_height(character->sprites_player[idle])) 
+        character->pos_y = SIZE_Y - al_get_bitmap_height(character->sprites_player[idle]);
+    if (character->pos_x < 0) character->pos_x = 0;
+    if (character->pos_x > SIZE_X - al_get_bitmap_width(character->sprites_player[idle])) 
+        character->pos_x = SIZE_X - al_get_bitmap_width(character->sprites_player[idle]);
 
     // Dispara tiros contínuos
-    if (key[ALLEGRO_KEY_SPACE] && soldier->time_since_last_shot >= soldier->shot_cooldown) {
-        shoot_player(soldier);
-        soldier->time_since_last_shot = 0; // Reseta o cooldown após disparar
+    if (key[ALLEGRO_KEY_SPACE] && character->time_since_last_shot >= character->shot_cooldown) {
+        shoot_player(character);
+        character->time_since_last_shot = 0; // Reseta o cooldown após disparar
     }
 
     // Atualiza os tiros
-    update_bullets_player(soldier, enemy_active);
+    update_bullets_player(character, enemy_active);
 }
 
 
-void draw_player(player *soldier){
-    al_draw_bitmap(soldier->sprites_player[soldier->atual_pose], soldier->pos_x, soldier->pos_y, 0);
-    draw_bullets_player(soldier);
+void draw_player(player *character){
+    al_draw_bitmap(character->sprites_player[character->atual_pose], character->pos_x, character->pos_y, 0);
+    draw_bullets_player(character);
 }
 
-void free_player(player *soldier) {
-    if (soldier != NULL) {
-        if (soldier->bullet != NULL) {
-            free(soldier->bullet);
-            soldier->bullet = NULL; // Prevenir uso após liberar
+void free_player(player *character) {
+    if (character != NULL) {
+        if (character->bullet != NULL) {
+            free(character->bullet);
+            character->bullet = NULL; // Prevenir uso após liberar
         }
-        free(soldier);
-        soldier = NULL;
+        free(character);
+        character = NULL;
     }
 }
-void shoot_player(player *soldier){
+void shoot_player(player *character){
     for (int i = 0; i < MAX_BULLETS; i++) {
-        if (!soldier->bullet[i].active) {  // Procura por um tiro inativo
+        if (!character->bullet[i].active) {  // Procura por um tiro inativo
             // Ajuste de posição para o meio da nave
-            soldier->bullet[i].pos_x = soldier->pos_x + (al_get_bitmap_width(soldier->sprites_player[standard]) / 2) - 5; // Meio da nave
-            soldier->bullet[i].pos_y = soldier->pos_y + (al_get_bitmap_height(soldier->sprites_player[standard]) / 2) - 2; // Meio da altura da nave
-            soldier->bullet[i].y_origin = soldier->bullet[i].pos_y;
-            //printf("SP pos_y: %2f,  %2f\n", soldier->bullet[i].pos_y, soldier->bullet[i].y_origin);
-            soldier->bullet[i].speed = 8.0; // Velocidade do tiro
-            soldier->bullet[i].active = true; // Marca o tiro como ativo
+            character->bullet[i].pos_x = character->pos_x + (al_get_bitmap_width(character->sprites_player[idle]) / 2) - 5; // Meio da nave
+            character->bullet[i].pos_y = character->pos_y + (al_get_bitmap_height(character->sprites_player[idle]) / 2) - 2; // Meio da altura da nave
+            character->bullet[i].y_origin = character->bullet[i].pos_y;
+            //printf("SP pos_y: %2f,  %2f\n", character->bullet[i].pos_y, character->bullet[i].y_origin);
+            character->bullet[i].speed = 8.0; // Velocidade do tiro
+            character->bullet[i].active = true; // Marca o tiro como ativo
             break;
         }
     }
 }
-
 
 void zizag(bullets* bullet){
     float max_top = bullet->y_origin - 12;
@@ -113,24 +112,18 @@ void zizag(bullets* bullet){
 
 }
 
-void update_bullets_player(player *soldier, enemy *enemy_active) {
+void update_bullets_player(player *character, enemy *enemy_active) {
     
     for (int i = 0; i < MAX_BULLETS; i++) {
-        if (soldier->bullet[i].active) {
-
-
-
+        if (character->bullet[i].active) {
             // Move o tiro (desloca apenas no eixo X)
-            soldier->bullet[i].pos_x += soldier->bullet[i].speed;
+            character->bullet[i].pos_x += character->bullet[i].speed;
 
-
-            //zizag(&soldier->bullet[i]);
-            
-            
+            //zizag(&character->bullet[i]);
 
             // Desativa o tiro se sair da tela
-            if (soldier->bullet[i].pos_x > SIZE_X) {
-                soldier->bullet[i].active = false;
+            if (character->bullet[i].pos_x > SIZE_X) {
+                character->bullet[i].active = false;
                 continue;
             }
 
@@ -140,44 +133,42 @@ void update_bullets_player(player *soldier, enemy *enemy_active) {
             float enemy_width = al_get_bitmap_width(enemy_active->sprite);
             float enemy_height = al_get_bitmap_height(enemy_active->sprite);
 
-            if (collision_detect(soldier->bullet[i].pos_x, soldier->bullet[i].pos_y, bullet_width, bullet_height,
+            if (collision_detect(character->bullet[i].pos_x, character->bullet[i].pos_y, bullet_width, bullet_height,
                                 enemy_active->pos_x, enemy_active->pos_y, enemy_width, enemy_height)) {
-                soldier->bullet[i].active = false; // Desativa o tiro
+                character->bullet[i].active = false; // Desativa o tiro
                 enemy_active->health_points--;   // Diminui a vida do inimigo
 
                 // Se o inimigo for derrotado, reposicione-o ou aplique lógica adicional
                 if (enemy_active->health_points <= 0) {
                     spawn_enemy(enemy_active, false);  // Reposiciona o inimigo
-                    soldier->enemies_defeated++;
+                    character->enemies_defeated++;
                     if (enemy_active->type == 5 || enemy_active->type == 10)
-                        soldier->enemies_defeated++;
-                    soldier->score += 10;        // Incrementa a pontuação do jogador
+                        character->enemies_defeated++;
+                    character->score += 10;        // Incrementa a pontuação do jogador
                 }
             }
         }
     }
 }
 
-
-
-bool check_collision(player *soldier, bullets *bullet) {
+bool check_collision(player *character, bullets *bullet) {
     int player_width = 135; 
     int player_height = 135;
     int bullet_width = 5;
     int bullet_height = 5;  
 
     // Verifica se o retângulo da bala do inimigo colide com o retângulo do player
-    return !(soldier->pos_x + player_width < bullet->pos_x || 
-             soldier->pos_x > bullet->pos_x + bullet_width || 
-             soldier->pos_y + player_height < bullet->pos_y || 
-             soldier->pos_y > bullet->pos_y + bullet_height);
+    return !(character->pos_x + player_width < bullet->pos_x || 
+             character->pos_x > bullet->pos_x + bullet_width || 
+             character->pos_y + player_height < bullet->pos_y || 
+             character->pos_y > bullet->pos_y + bullet_height);
 }
 
-void draw_bullets_player(player *soldier) {
+void draw_bullets_player(player *character) {
     for (int i = 0; i < MAX_BULLETS; i++) {
-        if (soldier->bullet[i].active) {
-            float bullet_start_x = soldier->bullet[i].pos_x;
-            float bullet_start_y = soldier->bullet[i].pos_y;
+        if (character->bullet[i].active) {
+            float bullet_start_x = character->bullet[i].pos_x;
+            float bullet_start_y = character->bullet[i].pos_y;
             al_draw_filled_rectangle(bullet_start_x, bullet_start_y - 2, 
                                      bullet_start_x + 10, bullet_start_y + 3, 
                                      al_map_rgb(255, 255, 0));
