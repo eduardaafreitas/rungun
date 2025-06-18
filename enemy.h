@@ -9,22 +9,15 @@
 #define ENEMY3_PATH "resources/enemies/Walk3.png"
 #define ENEMY4_PATH "resources/enemies/Walk4.png"
 //#define BOSS1_PATH "resources/bosses/boss1.png"
-#define ENEMY6_PATH "resources/enemies/Walk5.png"
-#define ENEMY7_PATH "resources/enemies/Walk6.png"
-//#define ENEMY8_PATH "resources/enemies/Walk8.png"
-//#define ENEMY9_PATH "resources/enemies/Walk9.png"
-//#define BOSS2_PATH "resources/bosses/boss2.png"
+
 
 //Tipos de inimigos:
 // 1: apenas voa
 // 2: atira sem mira
-// 3: atira mirando
-// 4: atira mais vezes
-// 5: boss 1
-// 6: apenas voa
+
 
 struct enemy{
-    ALLEGRO_BITMAP* sprite;
+    ALLEGRO_BITMAP* sprite[6];
     ALLEGRO_BITMAP* spriteboss1[8];
     int shot_flag, special_flag;
     float pos_x, pos_y;

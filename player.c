@@ -152,8 +152,8 @@ void update_bullets_player(player *character, enemy *enemy_active) {
             // Verifica colisão com o inimigo
             float bullet_width = 5;
             float bullet_height = 5;
-            float enemy_width = al_get_bitmap_width(enemy_active->sprite);
-            float enemy_height = al_get_bitmap_height(enemy_active->sprite);
+            float enemy_width = al_get_bitmap_width(enemy_active->sprite[0]);
+            float enemy_height = al_get_bitmap_height(enemy_active->sprite[0]);
 
             if (collision_detect(character->bullet[i].pos_x, character->bullet[i].pos_y, bullet_width, bullet_height,
                                 enemy_active->pos_x, enemy_active->pos_y, enemy_width, enemy_height)) {

@@ -16,8 +16,8 @@ enemy *init_enemy(ALLEGRO_BITMAP* sheet, int type){
     enemy_active->health_points = 0;
     enemy_active->type = type;
     enemy_active->shoot_timer = 0.0; // Inicializa o temporizador
-    enemy_active->can_shoot = (type == 2 || type == 3 || type == 4 || type == 5 || type == 7 || type == 8 || type == 9 || type == 10); 
-    sprites_enemy(sheet, enemy_active, type);
+    enemy_active->can_shoot = (type == 2 || type == 3 || type == 4); 
+    sprites_enemy(sheet, enemy_active);
     enemy_active->bullet = alloc_bullets(MAX_BULLETS);
     enemy_active->boss = false;
     return enemy_active;
@@ -25,20 +25,20 @@ enemy *init_enemy(ALLEGRO_BITMAP* sheet, int type){
 
 void spawn_enemy(enemy *enemy_active, bool boss) {
     enemy_active->pos_x = SIZE_X;
-    if (enemy_active->type == 5){
-        enemy_active->pos_y = (SIZE_Y - al_get_bitmap_height(enemy_active->sprite));
-        enemy_active->speed = 0.5; // Aumenta a velocidade com o nível
-        enemy_active->health_points = 10; // Aumenta os pontos de vida com o nível
+    //if (enemy_active->type == 5){
+    //     enemy_active->pos_y = (SIZE_Y - al_get_bitmap_height(enemy_active->sprite));
+    //     enemy_active->speed = 0.5; // Aumenta a velocidade com o nível
+    //     enemy_active->health_points = 10; // Aumenta os pontos de vida com o nível
 
-    } else if(enemy_active->type == 10){
-        enemy_active->pos_y = (0 + al_get_bitmap_height(enemy_active->sprite));
-        enemy_active->speed = 0.5; // Aumenta a velocidade com o nível
-        enemy_active->health_points = 10; // Aumenta os pontos de vida com o nível
-    } else {
-        enemy_active->pos_y = rand() % (SIZE_Y - al_get_bitmap_height(enemy_active->sprite));
+    // } else if(enemy_active->type == 10){
+    //     enemy_active->pos_y = (0 + al_get_bitmap_height(enemy_active->sprite));
+    //     enemy_active->speed = 0.5; // Aumenta a velocidade com o nível
+    //     enemy_active->health_points = 10; // Aumenta os pontos de vida com o nível
+    // } else {
+        enemy_active->pos_y = /*rand() % */(SIZE_Y - al_get_bitmap_height(enemy_active->sprite[0]));
         enemy_active->speed = 2.0 + (wave_level * 0.1); // Aumenta a velocidade com o nível
         enemy_active->health_points = 3 + wave_level / 5; // Aumenta os pontos de vida com o nível
-    }
+    //}
 }
 
 void update_enemy(enemy* enemy_active) {
@@ -65,7 +65,7 @@ void update_enemy(enemy* enemy_active) {
 }
 
 void draw_enemy(enemy *enemy_active){
-    al_draw_bitmap(enemy_active->sprite, enemy_active->pos_x, enemy_active->pos_y, 0);
+    al_draw_bitmap(enemy_active->sprite[0], enemy_active->pos_x, enemy_active->pos_y, 0);
 }
 
 void shoot_enemy(enemy *enemy_active) {
@@ -74,7 +74,7 @@ void shoot_enemy(enemy *enemy_active) {
             // Configura o tiro do inimigo
             enemy_active->bullet[i].active = true;
             enemy_active->bullet[i].pos_x = enemy_active->pos_x;
-            enemy_active->bullet[i].pos_y = enemy_active->pos_y + (al_get_bitmap_height(enemy_active->sprite) / 2); // Centralizado
+            enemy_active->bullet[i].pos_y = enemy_active->pos_y + (al_get_bitmap_height(enemy_active->sprite[0]) / 2); // Centralizado
             enemy_active->bullet[i].speed = 5.0; // Velocidade fixa, ajuste conforme necessário
             break; // Atira apenas uma bala por vez
         }
